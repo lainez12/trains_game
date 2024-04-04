@@ -2,6 +2,6 @@ package fr.umontpellier.iut.trains.cartes;
 
 public class Appartement extends Carte {
     public Appartement() {
-        super("Appartement");
+        super("Appartement", 3, 0, CouleurCarte.JAUNE);
     }
 }
