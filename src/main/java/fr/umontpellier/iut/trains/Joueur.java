@@ -123,6 +123,70 @@ public class Joueur {
         return 0;
     }
 
+    public int getArgent() {
+        return argent;
+    }
+
+    public void setArgent(int argent) {
+        this.argent = argent;
+    }
+
+    public int getPointsRails() {
+        return pointsRails;
+    }
+
+    public void setPointsRails(int pointsRails) {
+        this.pointsRails = pointsRails;
+    }
+
+    public int getNbJetonsRails() {
+        return nbJetonsRails;
+    }
+
+    public void setNbJetonsRails(int nbJetonsRails) {
+        this.nbJetonsRails = nbJetonsRails;
+    }
+
+    public void setMain(ListeDeCartes main) {
+        this.main = main;
+    }
+
+    public ListeDeCartes getPioche() {
+        return pioche;
+    }
+
+    public void setPioche(ListeDeCartes pioche) {
+        this.pioche = pioche;
+    }
+
+    public ListeDeCartes getDefausse() {
+        return defausse;
+    }
+
+    public void setDefausse(ListeDeCartes defausse) {
+        this.defausse = defausse;
+    }
+
+    public ListeDeCartes getCartesEnJeu() {
+        return cartesEnJeu;
+    }
+
+    public void setCartesEnJeu(ListeDeCartes cartesEnJeu) {
+        this.cartesEnJeu = cartesEnJeu;
+    }
+
+    public ListeDeCartes getCartesRecues() {
+        return cartesRecues;
+    }
+
+    public void setCartesRecues(ListeDeCartes cartesRecues) {
+        this.cartesRecues = cartesRecues;
+    }
+
+    public void setCouleur(CouleurJoueur couleur) {
+        this.couleur = couleur;
+    }
+
     /**
      * Retire et renvoie la première carte de la pioche.
      * <p>
