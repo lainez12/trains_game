@@ -114,7 +114,12 @@ public class Joueur {
      * @return le score total du joueur
      */
     public int getScoreTotal() {
-        // À FAIRE
+        int score = 0;
+        for (Carte i : main) {
+            if (i.getCouleur() == CouleurCarte.JAUNE) {
+                i = 0;
+            }
+        }
         return 0;
     }
 
