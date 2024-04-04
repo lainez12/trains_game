@@ -114,7 +114,12 @@ public class Joueur {
      * @return le score total du joueur
      */
     public int getScoreTotal() {
-        // À FAIRE
+        int score = 0;
+        for (Carte i : main) {
+            if (i.getCouleur() == CouleurCarte.JAUNE) {
+                i = 0;
+            }
+        }
         return 0;
     }
 
@@ -127,8 +132,17 @@ public class Joueur {
      * @return la carte piochée ou {@code null} si aucune carte disponible
      */
     public Carte piocher() {
-        // À FAIRE
-        return null;
+        if (pioche.isEmpty()) {
+            pioche.addAll(defausse);
+            defausse.removeAll(defausse);
+            pioche.melanger();
+        }
+        if (pioche.isEmpty()) {
+            return null;
+        }
+        Carte cartepioche = pioche.get(0);
+        pioche.remove(0);
+        return cartepioche;
     }
 
     /**
@@ -145,8 +159,18 @@ public class Joueur {
      *         défausse)
      */
     public List<Carte> piocher(int n) {
-        // À FAIRE
-        return null;
+        List<Carte> catesPioche = new ListeDeCartes();
+        if (pioche.size() + defausse.size() < n){
+            n = pioche.size() + defausse.size();
+        }
+        for (int i = 0; i < n; i++) {
+            catesPioche.add(piocher());
+        }
+        return catesPioche;
+    }
+
+    public ListeDeCartes getMain() {
+        return main;
     }
 
     /**
@@ -185,23 +209,52 @@ public class Joueur {
     public void jouerTour() {
         // Initialisation
         jeu.log("<div class=\"tour\">Tour de " + toLog() + "</div>");
-        // À FAIRE: compléter l'initialisation du tour si nécessaire (mais possiblement
-        // rien de spécial à faire)
 
         boolean finTour = false;
         // Boucle principale
         while (!finTour) {
             List<String> choixPossibles = new ArrayList<>();
-            // À FAIRE: préparer la liste des choix possibles
-
+            for (Carte c : main) {
+                // ajoute les noms de toutes les cartes en main
+                choixPossibles.add(c.getNom());
+            }
+            for (String nomCarte : jeu.getReserve().keySet()) {
+                // ajoute les noms des cartes dans la réserve préfixés de "ACHAT:"
+                choixPossibles.add("ACHAT:" + nomCarte);
+            }
             // Choix de l'action à réaliser
             String choix = choisir(String.format("Tour de %s", this.nom), choixPossibles, null, true);
 
-            // À FAIRE: exécuter l'action demandée par le joueur
+            if (choix.startsWith("ACHAT:")) {
+                // prendre une carte dans la réserve
+                String nomCarte = choix.split(":")[1];
+                Carte carte = jeu.prendreDansLaReserve(nomCarte);
+                if (carte != null) {
+                    log("Reçoit " + carte); // affichage dans le log
+                    cartesRecues.add(carte);
+                }
+            } else if (choix.equals("")) {
+                // terminer le tour
+                finTour = true;
+            } else {
+                // jouer une carte de la main
+                Carte carte = main.retirer(choix);
+                log("Joue " + carte); // affichage dans le log
+                cartesEnJeu.add(carte); // mettre la carte en jeu
+                carte.jouer(this); // exécuter l'action de la carte
+            }
         }
         // Finalisation
-        // À FAIRE: compléter la finalisation du tour
+        // défausser toutes les cartes
+        defausse.addAll(main);
+        main.clear();
+        defausse.addAll(cartesRecues);
+        cartesRecues.clear();
+        defausse.addAll(cartesEnJeu);
+        cartesEnJeu.clear();
+        main.addAll(piocher(5)); // piocher 5 cartes en main
     }
+
 
     /**
      * Attend une entrée de la part du joueur (au clavier ou sur la websocket) et
