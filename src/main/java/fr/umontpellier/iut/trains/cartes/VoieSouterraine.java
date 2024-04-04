@@ -5,7 +5,7 @@ import fr.umontpellier.iut.trains.Joueur;
 
 public class VoieSouterraine extends Carte {
     public VoieSouterraine() {
-        super("Voie souterraine", 7,0,CouleurCarte.VERT);
+        super("Voie souterraine", 7, 0, CouleurCarte.VERT);
     }
 
     @Override
@@ -13,7 +13,6 @@ public class VoieSouterraine extends Carte {
         super.jouer(joueur);
         joueur.setPointsRails(joueur.getPointsRails() + 1);
         joueur.getCartesRecues().add(joueur.getJeu().prendreDansLaReserve("Ferraille"));
-
 
     }
 }
