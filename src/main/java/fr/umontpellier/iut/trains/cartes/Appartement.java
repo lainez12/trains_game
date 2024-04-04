@@ -4,4 +4,9 @@ public class Appartement extends Carte {
     public Appartement() {
         super("Appartement", 3, 0, CouleurCarte.JAUNE);
     }
+
+    @Override
+    public int getPoints() {
+        return 1;
+    }
 }

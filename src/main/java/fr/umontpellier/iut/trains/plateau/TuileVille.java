@@ -18,4 +18,18 @@ public class TuileVille extends Tuile {
         this.nbGaresMax = taille;
         this.nbGaresPosees = 0;
     }
+
+    @Override
+    public int getPoints() {
+        switch (nbGaresPosees) {
+            case 1:
+                return 2;
+            case 2:
+                return 4;
+            case 3:
+                return 8;
+            default:
+                return 0;
+        }
+    }
 }

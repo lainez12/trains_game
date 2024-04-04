@@ -13,4 +13,9 @@ public class TuileEtoile extends Tuile {
         super();
         this.valeur = valeur;
     }
+
+    @Override
+    public int getPoints() {
+        return valeur;
+    }
 }

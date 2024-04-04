@@ -43,6 +43,10 @@ public abstract class Carte {
         return couleur;
     }
 
+    public int getPoints() {
+        return 0;
+    }
+
     /**
      * Cette fonction est exécutée lorsqu'un joueur joue la carte pendant son tour.
      * Toutes les cartes ont une méthode jouer, mais elle ne fait rien par défaut.

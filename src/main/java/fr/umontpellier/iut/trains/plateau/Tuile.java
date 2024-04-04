@@ -88,6 +88,14 @@ public abstract class Tuile {
         return 0;
     }
 
+    public int getPoints() {
+        return 0;
+    }
+
+    public Set<Joueur> getRails() {
+        return rails;
+    }
+
     /**
      * @return une représentation de la tuile sous la forme d'un dictionnaire de
      *         valeurs sérialisables (qui sera converti en JSON pour l'envoyer à

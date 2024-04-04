@@ -8,8 +8,10 @@ import java.util.Map;
 import java.util.StringJoiner;
 
 import fr.umontpellier.iut.trains.cartes.Carte;
+import fr.umontpellier.iut.trains.cartes.CouleurCarte;
 import fr.umontpellier.iut.trains.cartes.FabriqueListeDeCartes;
 import fr.umontpellier.iut.trains.cartes.ListeDeCartes;
+import fr.umontpellier.iut.trains.plateau.Tuile;
 
 public class Joueur {
     /**
@@ -117,10 +119,25 @@ public class Joueur {
         int score = 0;
         for (Carte i : main) {
             if (i.getCouleur() == CouleurCarte.JAUNE) {
-                i = 0;
+                score += i.getPoints();
             }
         }
-        return 0;
+        for (Carte i : defausse) {
+            if (i.getCouleur() == CouleurCarte.JAUNE) {
+                score += i.getPoints();
+            }
+        }
+        for (Carte i : pioche) {
+            if (i.getCouleur() == CouleurCarte.JAUNE) {
+                score += i.getPoints();
+            }
+        }
+        for (Tuile i : jeu.getTuiles()) {
+            if (i.getRails().contains(this)) {
+                score += i.getPoints();
+            }
+        }
+        return score;
     }
 
     public int getArgent() {
@@ -224,7 +241,7 @@ public class Joueur {
      */
     public List<Carte> piocher(int n) {
         List<Carte> catesPioche = new ListeDeCartes();
-        if (pioche.size() + defausse.size() < n){
+        if (pioche.size() + defausse.size() < n) {
             n = pioche.size() + defausse.size();
         }
         for (int i = 0; i < n; i++) {
@@ -318,7 +335,6 @@ public class Joueur {
         cartesEnJeu.clear();
         main.addAll(piocher(5)); // piocher 5 cartes en main
     }
-
 
     /**
      * Attend une entrée de la part du joueur (au clavier ou sur la websocket) et
