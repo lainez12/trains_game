@@ -11,8 +11,10 @@ public class SalleDeControle extends Carte {
     public void jouer(Joueur j){
         List<Carte> cartepiocher = new ListeDeCartes();
         cartepiocher = j.piocher(3);
-        for (int i = 0; i < cartepiocher.size(); i++) {
-            j.getMain().add(cartepiocher.get(i));
+        if (cartepiocher != null){
+            for (int i = 0; i < cartepiocher.size(); i++) {
+                j.getMain().add(cartepiocher.get(i));
+            }
         }
     }
 }
