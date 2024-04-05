@@ -61,6 +61,8 @@ public class Joueur {
      */
     private CouleurJoueur couleur;
 
+    private int score;
+
     public Joueur(Jeu jeu, String nom, CouleurJoueur couleur) {
         this.jeu = jeu;
         this.nom = nom;
@@ -73,6 +75,7 @@ public class Joueur {
         pioche = new ListeDeCartes();
         cartesEnJeu = new ListeDeCartes();
         cartesRecues = new ListeDeCartes();
+        score = 0;
 
         // créer 7 Train omnibus (non disponibles dans la réserve)
         pioche.addAll(FabriqueListeDeCartes.creerListeDeCartes("Train omnibus", 7));
@@ -137,7 +140,7 @@ public class Joueur {
                 score += i.getPoints();
             }
         }
-        return score;
+        return score + this.score;
     }
 
     public Jeu getJeu() {
@@ -319,8 +322,14 @@ public class Joueur {
                 String nomCarte = choix.split(":")[1];
                 Carte carte = jeu.prendreDansLaReserve(nomCarte);
                 if (carte != null) {
-                    log("Reçoit " + carte); // affichage dans le log
-                    cartesRecues.add(carte);
+                    if (argent < carte.getCout()) {
+                        argent -= carte.getCout();
+                        if (carte.getCouleur() == CouleurCarte.JAUNE) {
+                            cartesRecues.add(jeu.prendreDansLaReserve("Ferraille"));
+                        }
+                        log("Reçoit " + carte); // affichage dans le log
+                        cartesRecues.add(carte);
+                    }
                 }
             } else if (choix.equals("")) {
                 // terminer le tour
