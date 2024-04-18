@@ -18,4 +18,9 @@ public class TuileEtoile extends Tuile {
     public int getPoints() {
         return valeur;
     }
+
+    @Override
+    public int getSurcout() {
+        return valeur + super.getSurcout();
+    }
 }

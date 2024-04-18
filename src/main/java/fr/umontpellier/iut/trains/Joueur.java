@@ -12,6 +12,7 @@ import fr.umontpellier.iut.trains.cartes.CouleurCarte;
 import fr.umontpellier.iut.trains.cartes.FabriqueListeDeCartes;
 import fr.umontpellier.iut.trains.cartes.ListeDeCartes;
 import fr.umontpellier.iut.trains.plateau.Tuile;
+import fr.umontpellier.iut.trains.plateau.TuileMer;
 
 public class Joueur {
     /**
@@ -342,6 +343,15 @@ public class Joueur {
             } else if (choix.equals("")) {
                 // terminer le tour
                 finTour = true;
+            } else if (choix.startsWith("TUILE:")) {
+                String temp = choix.split(":")[1];
+                int coord = -1;
+                try {
+                    coord = Integer.parseInt(temp);
+                } catch (NumberFormatException e) {
+                    log("La chaîne n'est pas un nombre valide.");
+                }
+                poseRail(coord);
             } else {
                 // jouer une carte de la main
                 Carte carte = main.retirer(choix);
@@ -359,6 +369,32 @@ public class Joueur {
         defausse.addAll(cartesEnJeu);
         cartesEnJeu.clear();
         main.addAll(piocher(5)); // piocher 5 cartes en main
+    }
+
+    public void poseRail(int coord) {
+        if (nbJetonsRails == 0) {
+            log("Vous n'avez plus de jeton rail.");
+        } else if (pointsRails == 0) {
+            log("Vous n'avez plus de point rail.");
+        } else if (coord < 0 || coord > 75) {
+            log("Entier pour coordonnées attendu doit être entre 0 et 75.");
+        } else if (jeu.getTuile(coord) instanceof TuileMer) {
+            log("La rail ne peut être posée dans la mer.");
+        } else if (jeu.getTuile(coord).hasRail(this)) {
+            log("Vous êtes déjà présent sur cette case.");
+        } else if (!jeu.getTuile(coord).estVoisine(this)) {
+            log("Vous ne possédez pas de case voisine.");
+        } else if (jeu.getTuile(coord).getSurcout() > argent) {
+            log("Vous n'avez pas assez d'argent.");
+        } else {
+            argent -= jeu.getTuile(coord).getSurcout();
+            if (!jeu.getTuile(coord).estVide()) {
+                main.add(jeu.prendreDansLaReserve("Feraille"));
+            }
+            jeu.getTuile(coord).ajouterRail(this);
+            pointsRails--;
+            nbJetonsRails--;
+        }
     }
 
     /**
