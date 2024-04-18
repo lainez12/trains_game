@@ -23,6 +23,7 @@ public abstract class Tuile {
     public Tuile() {
         this.voisines = new ArrayList<>();
         this.rails = new HashSet<>();
+
     }
 
     /**
@@ -94,6 +95,20 @@ public abstract class Tuile {
 
     public Set<Joueur> getRails() {
         return rails;
+    }
+
+    public int getSurcout() {
+        return rails.size();
+    }
+
+    // true si le joueur j est présent sur une des cases voisine, false sinon
+    public boolean estVoisine(Joueur j) {
+        for (Tuile t : voisines) {
+            if (t.hasRail(j)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

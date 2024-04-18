@@ -10,15 +10,12 @@ public class Aiguillage extends Carte {
         super("Aiguillage", 5, 0, CouleurCarte.ROUGE);
     }
 
-    public int getPrix() {
-        return 5;
-    }
     @Override
-    public void jouer(Joueur j){
-        List<Carte> cartepiocher = new ListeDeCartes();
-        cartepiocher = j.piocher(2);
-        for (int i = 0; i < cartepiocher.size(); i++) {
-            j.getMain().add(cartepiocher.get(i));
+    public void jouer(Joueur j) {
+        List<Carte> cartePioche = new ListeDeCartes();
+        cartePioche = j.piocher(2);
+        for (Carte i : cartePioche) {
+            j.getMain().add(i);
         }
     }
 }

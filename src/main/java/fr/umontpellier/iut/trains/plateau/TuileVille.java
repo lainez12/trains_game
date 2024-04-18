@@ -32,4 +32,10 @@ public class TuileVille extends Tuile {
                 return 0;
         }
     }
+
+    @Override
+    public int getSurcout() {
+        return 1 + nbGaresMax + super.getSurcout();
+    }
+
 }
