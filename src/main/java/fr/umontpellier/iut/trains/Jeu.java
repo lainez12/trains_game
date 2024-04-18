@@ -212,7 +212,28 @@ public class Jeu implements Runnable {
      */
     public boolean estFini() {
         // À FAIRE: réécrire cette méthode
+        return verifNbJetonsRails() || nbJetonsGare == 0 || verifReservePourFin();
+    }
+
+    // true si un joueur a nbJetonsRails = 0, false sinon
+    private boolean verifNbJetonsRails() {
+        for (Joueur j : joueurs) {
+            if (j.getNbJetonsRails() == 0) {
+                return true;
+            }
+        }
         return false;
+    }
+
+    //
+    private boolean verifReservePourFin() {
+        int temp = 0;
+        for (Map.Entry<String, ListeDeCartes> l : reserve.entrySet()) {
+            if (l.getValue().isEmpty() && l.getKey() != "Feraille") {
+                temp++;
+            }
+        }
+        return temp >= 4;
     }
 
     /**
