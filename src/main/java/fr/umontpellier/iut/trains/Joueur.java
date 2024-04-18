@@ -345,13 +345,12 @@ public class Joueur {
                 finTour = true;
             } else if (choix.startsWith("TUILE:")) {
                 String temp = choix.split(":")[1];
-                int coord = -1;
                 try {
-                    coord = Integer.parseInt(temp);
+                    int coord = Integer.parseInt(temp);
+                    poseRail(coord);
                 } catch (NumberFormatException e) {
                     log("La chaîne n'est pas un nombre valide.");
                 }
-                poseRail(coord);
             } else {
                 // jouer une carte de la main
                 Carte carte = main.retirer(choix);
