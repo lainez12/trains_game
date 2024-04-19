@@ -2,7 +2,6 @@ package fr.umontpellier.iut.trains.cartes;
 
 import fr.umontpellier.iut.trains.Joueur;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Aiguillage extends Carte {
@@ -14,8 +13,8 @@ public class Aiguillage extends Carte {
     public void jouer(Joueur j) {
         List<Carte> cartePioche = new ListeDeCartes();
         cartePioche = j.piocher(2);
-        for (Carte i : cartePioche) {
-            j.getMain().add(i);
+        for (Carte c : cartePioche) {
+            j.getMain().add(c);
         }
     }
 }
