@@ -64,6 +64,8 @@ public class Joueur {
 
     private int score;
 
+    private boolean passif;
+
     public Joueur(Jeu jeu, String nom, CouleurJoueur couleur) {
         this.jeu = jeu;
         this.nom = nom;
@@ -77,6 +79,7 @@ public class Joueur {
         cartesEnJeu = new ListeDeCartes();
         cartesRecues = new ListeDeCartes();
         score = 0;
+        passif = false;
 
         // créer 7 Train omnibus (non disponibles dans la réserve)
         pioche.addAll(FabriqueListeDeCartes.creerListeDeCartes("Train omnibus", 7));
@@ -154,6 +157,10 @@ public class Joueur {
 
     public Jeu getJeu() {
         return jeu;
+    }
+
+    public void setPassif(boolean b) {
+        passif = b;
     }
 
     public void setJeu(Jeu jeu) {
@@ -368,6 +375,7 @@ public class Joueur {
         defausse.addAll(cartesEnJeu);
         cartesEnJeu.clear();
         main.addAll(piocher(5)); // piocher 5 cartes en main
+        passif = false;
     }
 
     public void poseRail(int coord) {
@@ -383,13 +391,18 @@ public class Joueur {
             log("Vous êtes déjà présent sur cette case.");
         } else if (!jeu.getTuile(coord).estVoisine(this)) {
             log("Vous ne possédez pas de case voisine.");
-        } else if (jeu.getTuile(coord).getSurcout() > argent) {
+        } else if (jeu.getTuile(coord).getSurcout(passif) > argent) {
             log("Vous n'avez pas assez d'argent.");
         } else {
-            argent -= jeu.getTuile(coord).getSurcout();
-            if (!jeu.getTuile(coord).estVide()) {
-                main.add(jeu.prendreDansLaReserve("Feraille"));
+            if (!passif) {
+                if (!jeu.getTuile(coord).estVide()) {
+                    Carte c = jeu.prendreDansLaReserve("Feraille");
+                    if (c != null) {
+                        main.add(c);
+                    }
+                }
             }
+            argent -= jeu.getTuile(coord).getSurcout(passif);
             jeu.getTuile(coord).ajouterRail(this);
             pointsRails--;
             nbJetonsRails--;

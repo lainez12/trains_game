@@ -97,7 +97,10 @@ public abstract class Tuile {
         return rails;
     }
 
-    public int getSurcout() {
+    public int getSurcout(boolean passif) {
+        if (passif) {
+            return 0;
+        }
         return rails.size();
     }
 

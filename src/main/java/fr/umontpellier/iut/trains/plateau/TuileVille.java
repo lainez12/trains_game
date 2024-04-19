@@ -34,8 +34,8 @@ public class TuileVille extends Tuile {
     }
 
     @Override
-    public int getSurcout() {
-        return 1 + nbGaresMax + super.getSurcout();
+    public int getSurcout(boolean passif) {
+        return 1 + nbGaresMax + super.getSurcout(passif);
     }
 
 }
