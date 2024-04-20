@@ -64,6 +64,9 @@ public class Joueur {
 
     private int score;
 
+    private boolean passifCoop;
+    private boolean passifDepot;
+
     public Joueur(Jeu jeu, String nom, CouleurJoueur couleur) {
         this.jeu = jeu;
         this.nom = nom;
@@ -77,6 +80,7 @@ public class Joueur {
         cartesEnJeu = new ListeDeCartes();
         cartesRecues = new ListeDeCartes();
         score = 0;
+        setPassifFalse();
 
         // créer 7 Train omnibus (non disponibles dans la réserve)
         pioche.addAll(FabriqueListeDeCartes.creerListeDeCartes("Train omnibus", 7));
@@ -224,6 +228,19 @@ public class Joueur {
         this.couleur = couleur;
     }
 
+    public void setPassifCoop(boolean b) {
+        passifCoop = b;
+    }
+
+    public void setPassifDepot(boolean b) {
+        passifDepot = b;
+    }
+
+    private void setPassifFalse() {
+        passifCoop = false;
+        passifDepot = false;
+    }
+
     /**
      * Retire et renvoie la première carte de la pioche.
      * <p>
@@ -260,14 +277,14 @@ public class Joueur {
      *         défausse)
      */
     public List<Carte> piocher(int n) {
-        List<Carte> catesPioche = new ListeDeCartes();
+        List<Carte> cartesPioche = new ListeDeCartes();
         if (pioche.size() + defausse.size() < n) {
             n = pioche.size() + defausse.size();
         }
         for (int i = 0; i < n; i++) {
-            catesPioche.add(piocher());
+            cartesPioche.add(piocher());
         }
-        return catesPioche;
+        return cartesPioche;
     }
 
     public ListeDeCartes getMain() {
@@ -333,7 +350,7 @@ public class Joueur {
                 if (carte != null) {
                     if (argent < carte.getCout()) {
                         argent -= carte.getCout();
-                        if (carte.getCouleur() == CouleurCarte.JAUNE) {
+                        if (carte.getCouleur() == CouleurCarte.JAUNE && !passifDepot) {
                             cartesRecues.add(jeu.prendreDansLaReserve("Ferraille"));
                         }
                         log("Reçoit " + carte); // affichage dans le log
@@ -368,6 +385,7 @@ public class Joueur {
         defausse.addAll(cartesEnJeu);
         cartesEnJeu.clear();
         main.addAll(piocher(5)); // piocher 5 cartes en main
+        setPassifFalse();
     }
 
     public void poseRail(int coord) {
@@ -383,13 +401,18 @@ public class Joueur {
             log("Vous êtes déjà présent sur cette case.");
         } else if (!jeu.getTuile(coord).estVoisine(this)) {
             log("Vous ne possédez pas de case voisine.");
-        } else if (jeu.getTuile(coord).getSurcout() > argent) {
+        } else if (jeu.getTuile(coord).getSurcout(passifCoop) > argent) {
             log("Vous n'avez pas assez d'argent.");
         } else {
-            argent -= jeu.getTuile(coord).getSurcout();
-            if (!jeu.getTuile(coord).estVide()) {
-                main.add(jeu.prendreDansLaReserve("Feraille"));
+            if (!passifCoop && !passifDepot) {
+                if (!jeu.getTuile(coord).estVide()) {
+                    Carte c = jeu.prendreDansLaReserve("Feraille");
+                    if (c != null) {
+                        main.add(c);
+                    }
+                }
             }
+            argent -= jeu.getTuile(coord).getSurcout(passifCoop);
             jeu.getTuile(coord).ajouterRail(this);
             pointsRails--;
             nbJetonsRails--;

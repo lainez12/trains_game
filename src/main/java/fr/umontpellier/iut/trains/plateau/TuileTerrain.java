@@ -16,14 +16,14 @@ public class TuileTerrain extends Tuile {
     }
 
     @Override
-    public int getSurcout() {
+    public int getSurcout(boolean passif) {
         switch (type) {
             case FLEUVE:
-                return 1 + super.getSurcout();
+                return 1 + super.getSurcout(passif);
             case MONTAGNE:
-                return 2 + super.getSurcout();
+                return 2 + super.getSurcout(passif);
             default:
-                return super.getSurcout();
+                return super.getSurcout(passif);
         }
     }
 }

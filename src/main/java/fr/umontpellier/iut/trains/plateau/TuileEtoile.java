@@ -20,7 +20,7 @@ public class TuileEtoile extends Tuile {
     }
 
     @Override
-    public int getSurcout() {
-        return valeur + super.getSurcout();
+    public int getSurcout(boolean passif) {
+        return valeur + super.getSurcout(passif);
     }
 }

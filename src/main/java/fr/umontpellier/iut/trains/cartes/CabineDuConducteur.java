@@ -12,7 +12,7 @@ public class CabineDuConducteur extends Carte {
     @Override
     public void jouer(Joueur j) {
         Carte c;
-        ArrayList<String> choix = new ArrayList();
+        ArrayList<String> choix = new ArrayList<>();
         String rep = " ";
         for (Carte i : j.getMain()) {
             choix.add(i.getNom());
