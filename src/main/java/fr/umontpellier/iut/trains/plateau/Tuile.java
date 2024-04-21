@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Set;
 
 import fr.umontpellier.iut.trains.Joueur;
+import fr.umontpellier.iut.trains.cartes.Cooperation;
+import fr.umontpellier.iut.trains.cartes.ListeDeCartes;
 
 public abstract class Tuile {
     /**
@@ -97,8 +99,8 @@ public abstract class Tuile {
         return rails;
     }
 
-    public int getSurcout(boolean passif) {
-        if (passif) {
+    public int getSurcout(ListeDeCartes l) {
+        if (Joueur.estEnJeu(l, Cooperation.class)) {
             return 0;
         }
         return rails.size();

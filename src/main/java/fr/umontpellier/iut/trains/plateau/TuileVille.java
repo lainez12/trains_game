@@ -1,5 +1,10 @@
 package fr.umontpellier.iut.trains.plateau;
 
+import fr.umontpellier.iut.trains.Joueur;
+import fr.umontpellier.iut.trains.cartes.ListeDeCartes;
+import fr.umontpellier.iut.trains.cartes.Viaduc;
+import fr.umontpellier.iut.trains.cartes.VoieSouterraine;
+
 /**
  * Classe représentant une tuile ville (où l'on peut poser des gares)
  */
@@ -34,8 +39,10 @@ public class TuileVille extends Tuile {
     }
 
     @Override
-    public int getSurcout(boolean passif) {
-        return 1 + nbGaresMax + super.getSurcout(passif);
+    public int getSurcout(ListeDeCartes l) {
+        if (Joueur.estEnJeu(l, Viaduc.class) || Joueur.estEnJeu(l, VoieSouterraine.class))
+            return 0;
+        return 1 + nbGaresPosees + super.getSurcout(l);
     }
 
 }
