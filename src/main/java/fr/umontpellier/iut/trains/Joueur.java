@@ -347,7 +347,7 @@ public class Joueur {
                 String nomCarte = choix.split(":")[1];
                 Carte carte = jeu.prendreDansLaReserve(nomCarte);
                 if (carte != null) {
-                    if (argent < carte.getCout()) {
+                    if (argent > carte.getCout()) {
                         argent -= carte.getCout();
                         if (carte.getCouleur() == CouleurCarte.JAUNE && !passifDepot) {
                             cartesRecues.add(jeu.prendreDansLaReserve("Ferraille"));
