@@ -338,7 +338,7 @@ public class Joueur {
                 if (carte != null) {
                     if (argent >= carte.getCout()) {
                         argent -= carte.getCout();
-                        if (carte.getCouleur() == CouleurCarte.JAUNE && !contientCarte(cartesEnJeu, Depotoir.class)) {
+                        if (carte.getCouleur() == CouleurCarte.JAUNE && !estEnJeu(Depotoir.class)) {
                             cartesRecues.add(jeu.prendreDansLaReserve("Ferraille"));
                         }
                         log("Reçoit " + carte); // affichage dans le log
@@ -390,10 +390,10 @@ public class Joueur {
             log("Vous êtes déjà présent sur cette case.");
         } else if (!jeu.getTuile(coord).estVoisine(this)) {
             log("Vous ne possédez pas de case voisine.");
-        } else if (jeu.getTuile(coord).getSurcout(contientCarte(cartesEnJeu, Cooperation.class)) > argent) {
+        } else if (jeu.getTuile(coord).getSurcout(estEnJeu(Cooperation.class)) > argent) {
             log("Vous n'avez pas assez d'argent.");
         } else {
-            if (!contientCarte(cartesEnJeu, Cooperation.class) && !contientCarte(cartesEnJeu, Depotoir.class)) {
+            if (!estEnJeu(Cooperation.class) && !estEnJeu(Depotoir.class)) {
                 if (!jeu.getTuile(coord).estVide()) {
                     Carte c = jeu.prendreDansLaReserve("Feraille");
                     if (c != null) {
@@ -401,15 +401,15 @@ public class Joueur {
                     }
                 }
             }
-            argent -= jeu.getTuile(coord).getSurcout(contientCarte(cartesEnJeu, Cooperation.class));
+            argent -= jeu.getTuile(coord).getSurcout(estEnJeu(Cooperation.class));
             jeu.getTuile(coord).ajouterRail(this);
             pointsRails--;
             nbJetonsRails--;
         }
     }
 
-    public static boolean contientCarte(ListeDeCartes liste, Class<?> type) {
-        for (Carte c : liste) {
+    public boolean estEnJeu(Class<?> type) {
+        for (Carte c : cartesEnJeu) {
             if (type.isInstance(c)) {
                 return true;
             }
