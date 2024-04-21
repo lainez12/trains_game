@@ -9,12 +9,15 @@ import java.util.StringJoiner;
 
 import fr.umontpellier.iut.trains.cartes.Carte;
 import fr.umontpellier.iut.trains.cartes.CouleurCarte;
+import fr.umontpellier.iut.trains.cartes.Depotoir;
+import fr.umontpellier.iut.trains.cartes.Cooperation;
 import fr.umontpellier.iut.trains.cartes.FabriqueListeDeCartes;
 import fr.umontpellier.iut.trains.cartes.ListeDeCartes;
 import fr.umontpellier.iut.trains.plateau.Tuile;
 import fr.umontpellier.iut.trains.plateau.TuileMer;
 
 public class Joueur {
+    private static final Class<?> Cooperation = null;
     /**
      * Le jeu auquel le joueur est rattaché
      */
@@ -64,9 +67,6 @@ public class Joueur {
 
     private int score;
 
-    private boolean passifCoop;
-    private boolean passifDepot;
-
     public Joueur(Jeu jeu, String nom, CouleurJoueur couleur) {
         this.jeu = jeu;
         this.nom = nom;
@@ -80,7 +80,6 @@ public class Joueur {
         cartesEnJeu = new ListeDeCartes();
         cartesRecues = new ListeDeCartes();
         score = 0;
-        setPassifFalse();
 
         // créer 7 Train omnibus (non disponibles dans la réserve)
         pioche.addAll(FabriqueListeDeCartes.creerListeDeCartes("Train omnibus", 7));
@@ -223,21 +222,9 @@ public class Joueur {
     public void setCouleur(CouleurJoueur couleur) {
         this.couleur = couleur;
     }
+
     public void setNbJetonsRails(int n) {
         nbJetonsRails = n;
-    }
-
-    public void setPassifCoop(boolean b) {
-        passifCoop = b;
-    }
-
-    public void setPassifDepot(boolean b) {
-        passifDepot = b;
-    }
-
-    private void setPassifFalse() {
-        passifCoop = false;
-        passifDepot = false;
     }
 
     /**
@@ -349,13 +336,15 @@ public class Joueur {
                 if (!nomCarte.equals("Ferraille"))
                     carte = jeu.prendreDansLaReserve(nomCarte);
                 if (carte != null) {
-                    if (argent > carte.getCout()) {
+                    if (argent >= carte.getCout()) {
                         argent -= carte.getCout();
-                        if (carte.getCouleur() == CouleurCarte.JAUNE && !passifDepot) {
+                        if (carte.getCouleur() == CouleurCarte.JAUNE && !contientCarte(cartesEnJeu, Depotoir.class)) {
                             cartesRecues.add(jeu.prendreDansLaReserve("Ferraille"));
                         }
                         log("Reçoit " + carte); // affichage dans le log
                         cartesRecues.add(carte);
+                    } else {
+                        jeu.getReserve().get(nomCarte).add(carte);
                     }
                 }
             } else if (choix.equals("")) {
@@ -386,7 +375,6 @@ public class Joueur {
         defausse.addAll(cartesEnJeu);
         cartesEnJeu.clear();
         main.addAll(piocher(5)); // piocher 5 cartes en main
-        setPassifFalse();
     }
 
     public void poseRail(int coord) {
@@ -402,10 +390,10 @@ public class Joueur {
             log("Vous êtes déjà présent sur cette case.");
         } else if (!jeu.getTuile(coord).estVoisine(this)) {
             log("Vous ne possédez pas de case voisine.");
-        } else if (jeu.getTuile(coord).getSurcout(passifCoop) > argent) {
+        } else if (jeu.getTuile(coord).getSurcout(contientCarte(cartesEnJeu, Cooperation.class)) > argent) {
             log("Vous n'avez pas assez d'argent.");
         } else {
-            if (!passifCoop && !passifDepot) {
+            if (!contientCarte(cartesEnJeu, Cooperation.class) && !contientCarte(cartesEnJeu, Depotoir.class)) {
                 if (!jeu.getTuile(coord).estVide()) {
                     Carte c = jeu.prendreDansLaReserve("Feraille");
                     if (c != null) {
@@ -413,11 +401,20 @@ public class Joueur {
                     }
                 }
             }
-            argent -= jeu.getTuile(coord).getSurcout(passifCoop);
+            argent -= jeu.getTuile(coord).getSurcout(contientCarte(cartesEnJeu, Cooperation.class));
             jeu.getTuile(coord).ajouterRail(this);
             pointsRails--;
             nbJetonsRails--;
         }
+    }
+
+    public static boolean contientCarte(ListeDeCartes liste, Class<?> type) {
+        for (Carte c : liste) {
+            if (type.isInstance(c)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
