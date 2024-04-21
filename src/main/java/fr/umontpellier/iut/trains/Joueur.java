@@ -13,8 +13,16 @@ import fr.umontpellier.iut.trains.cartes.Depotoir;
 import fr.umontpellier.iut.trains.cartes.Cooperation;
 import fr.umontpellier.iut.trains.cartes.FabriqueListeDeCartes;
 import fr.umontpellier.iut.trains.cartes.ListeDeCartes;
+import fr.umontpellier.iut.trains.cartes.PontEnAcier;
+import fr.umontpellier.iut.trains.cartes.TrainMatinal;
+import fr.umontpellier.iut.trains.cartes.Tunnel;
+import fr.umontpellier.iut.trains.cartes.Viaduc;
+import fr.umontpellier.iut.trains.cartes.VoieSouterraine;
 import fr.umontpellier.iut.trains.plateau.Tuile;
 import fr.umontpellier.iut.trains.plateau.TuileMer;
+import fr.umontpellier.iut.trains.plateau.TuileTerrain;
+import fr.umontpellier.iut.trains.plateau.TuileVille;
+import fr.umontpellier.iut.trains.plateau.TypeTerrain;
 
 public class Joueur {
     private static final Class<?> Cooperation = null;
@@ -338,11 +346,15 @@ public class Joueur {
                 if (carte != null) {
                     if (argent >= carte.getCout()) {
                         argent -= carte.getCout();
-                        if (carte.getCouleur() == CouleurCarte.JAUNE && !estEnJeu(Depotoir.class)) {
+                        if (carte.getCouleur() == CouleurCarte.JAUNE && !estEnJeu(cartesEnJeu, Depotoir.class)) {
                             cartesRecues.add(jeu.prendreDansLaReserve("Ferraille"));
                         }
                         log("Reçoit " + carte); // affichage dans le log
-                        cartesRecues.add(carte);
+                        if (estEnJeu(cartesEnJeu, TrainMatinal.class)) {
+                            main.add(carte);
+                        } else {
+                            cartesRecues.add(carte);
+                        }
                     } else {
                         jeu.getReserve().get(nomCarte).add(carte);
                     }
@@ -390,31 +402,42 @@ public class Joueur {
             log("Vous êtes déjà présent sur cette case.");
         } else if (!jeu.getTuile(coord).estVoisine(this)) {
             log("Vous ne possédez pas de case voisine.");
-        } else if (jeu.getTuile(coord).getSurcout(estEnJeu(Cooperation.class)) > argent) {
+        } else if (jeu.getTuile(coord).getSurcout(cartesEnJeu) > argent) {
             log("Vous n'avez pas assez d'argent.");
         } else {
-            if (!estEnJeu(Cooperation.class) && !estEnJeu(Depotoir.class)) {
-                if (!jeu.getTuile(coord).estVide()) {
-                    Carte c = jeu.prendreDansLaReserve("Feraille");
-                    if (c != null) {
-                        main.add(c);
-                    }
+            if (!jeu.getTuile(coord).estVide() && surcoutRail(jeu.getTuile(coord))) {
+                Carte c = jeu.prendreDansLaReserve("Ferraille");
+                if (c != null) {
+                    main.add(c);
                 }
             }
-            argent -= jeu.getTuile(coord).getSurcout(estEnJeu(Cooperation.class));
+            argent -= jeu.getTuile(coord).getSurcout(cartesEnJeu);
             jeu.getTuile(coord).ajouterRail(this);
             pointsRails--;
             nbJetonsRails--;
         }
     }
 
-    public boolean estEnJeu(Class<?> type) {
-        for (Carte c : cartesEnJeu) {
+    public static boolean estEnJeu(ListeDeCartes liste, Class<?> type) {
+        for (Carte c : liste) {
             if (type.isInstance(c)) {
                 return true;
             }
         }
         return false;
+    }
+
+    private boolean surcoutRail(Tuile t) {
+        if (t instanceof TuileVille && estEnJeu(cartesEnJeu, Viaduc.class))
+            return false;
+        if (t instanceof TuileTerrain) {
+            if (((TuileTerrain) t).getType() == TypeTerrain.FLEUVE && estEnJeu(cartesEnJeu, PontEnAcier.class))
+                return false;
+            if (((TuileTerrain) t).getType() == TypeTerrain.MONTAGNE && estEnJeu(cartesEnJeu, Tunnel.class))
+                return false;
+        }
+        return !estEnJeu(cartesEnJeu, Cooperation.class) && !estEnJeu(cartesEnJeu, Depotoir.class)
+                && !estEnJeu(cartesEnJeu, VoieSouterraine.class);
     }
 
     /**
