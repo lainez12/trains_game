@@ -22,9 +22,7 @@ public class TrainDeMarchandises extends Carte {
         while (rep != "" && joueur.getMain().count("Ferraille") != 0) {
             rep = joueur.choisir("Voulez vous mettre la feraille de vore main dans la pile feraille",choix,null,true);
             if (rep != ""){
-                Ferraille f = new Ferraille();
-                joueur.getMain().retirer("Ferraille");
-                joueur.getJeu().getReserve().get("Ferraille").add(f);
+                joueur.getJeu().getReserve().get("Ferraille").add(joueur.getMain().retirer("Ferraille"));
                 joueur.setArgent(joueur.getArgent() + 1);
             }
         }
