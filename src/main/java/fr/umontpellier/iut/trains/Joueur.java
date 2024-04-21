@@ -345,7 +345,9 @@ public class Joueur {
             if (choix.startsWith("ACHAT:")) {
                 // prendre une carte dans la réserve
                 String nomCarte = choix.split(":")[1];
-                Carte carte = jeu.prendreDansLaReserve(nomCarte);
+                Carte carte = null;
+                if (!nomCarte.equals("Ferraille"))
+                    carte = jeu.prendreDansLaReserve(nomCarte);
                 if (carte != null) {
                     if (argent > carte.getCout()) {
                         argent -= carte.getCout();
