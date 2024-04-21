@@ -14,6 +14,6 @@ public class Cooperation extends Carte {
         if (c != null) {
             j.getMain().add(c);
         }
-        j.setPassifCoop(true);
+        j.getCartesEnJeu().add(this);
     }
 }

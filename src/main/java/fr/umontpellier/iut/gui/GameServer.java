@@ -36,6 +36,7 @@ public class GameServer {
         // Noms des joueurs (définit le nombre de joueurs de la partie)
         String[] nomsJoueurs = { "Guybrush", "Largo" };
 
+
         // Liste des cartes à utiliser :
         String[] nomsCartes = {"Aiguillage", "Passage en gare", "Salle de contrôle"};
 
