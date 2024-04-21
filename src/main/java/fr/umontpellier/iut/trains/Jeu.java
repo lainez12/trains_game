@@ -16,6 +16,8 @@ import fr.umontpellier.iut.trains.cartes.FabriqueListeDeCartes;
 import fr.umontpellier.iut.trains.cartes.ListeDeCartes;
 import fr.umontpellier.iut.trains.plateau.Plateau;
 import fr.umontpellier.iut.trains.plateau.Tuile;
+import fr.umontpellier.iut.trains.plateau.TuileEtoile;
+import fr.umontpellier.iut.trains.plateau.TuileMer;
 
 public class Jeu implements Runnable {
     /**
@@ -185,6 +187,8 @@ public class Jeu implements Runnable {
         joueurCourant = joueurs.get(i);
     }
 
+
+
     /**
      * Démarre la partie et exécute les tours des joueurs jusqu'à ce que la partie
      * soit terminée
@@ -192,6 +196,23 @@ public class Jeu implements Runnable {
     public void run() {
         // initialisation (chaque joueur choisit une position de départ)
         // À FAIRE: compléter la partie initialisation
+        String choix;
+        List<String> choixPossibles = new ArrayList<>();
+        for (int i = 0; i < tuiles.size(); i++) {
+            if (!(getTuile(i) instanceof TuileMer && getTuile(i) instanceof TuileEtoile)) {
+                choixPossibles.add("TUILE:" + i);
+            }
+        }
+        for (int i = 0; i < joueurs.size(); i++) {
+            log(joueurCourant.getNom() + ": Choisissez votre position de départ");
+            choix = joueurCourant.choisir(String.format("Tour de %s", joueurCourant.getNom()), choixPossibles, null, false);
+            String temp = choix.split(":")[1];
+            int coord = Integer.parseInt(temp);
+            getTuile(coord).ajouterRail(joueurCourant);
+            joueurCourant.setNbJetonsRails(19);
+            passeAuJoueurSuivant();
+            choixPossibles.remove(choix);
+        }
 
         // tours des joueurs jusqu'à une condition de fin
         while (!estFini()) {

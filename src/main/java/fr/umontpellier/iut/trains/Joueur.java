@@ -184,10 +184,6 @@ public class Joueur {
         return nbJetonsRails;
     }
 
-    public void setNbJetonsRails(int nbJetonsRails) {
-        this.nbJetonsRails = nbJetonsRails;
-    }
-
     public void setMain(ListeDeCartes main) {
         this.main = main;
     }
@@ -226,6 +222,9 @@ public class Joueur {
 
     public void setCouleur(CouleurJoueur couleur) {
         this.couleur = couleur;
+    }
+    public void setNbJetonsRails(int n) {
+        nbJetonsRails = n;
     }
 
     public void setPassifCoop(boolean b) {
