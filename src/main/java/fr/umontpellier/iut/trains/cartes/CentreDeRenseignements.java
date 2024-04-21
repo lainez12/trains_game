@@ -11,6 +11,7 @@ public class CentreDeRenseignements extends Carte {
 
     @Override
     public void jouer(Joueur j) {
+        j.setArgent(j.getArgent() + getValeur());
         List<Carte> cartePioche = new ListeDeCartes();
         cartePioche = j.piocher(4);
         for (Carte i : cartePioche) {

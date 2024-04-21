@@ -8,9 +8,13 @@ public class PoseDeRails extends Carte {
     }
 
     @Override
-    public void jouer(Joueur joueur) {
-        super.jouer(joueur);
-        joueur.setPointsRails(joueur.getPointsRails() + 1);
-        joueur.getCartesRecues().add(joueur.getJeu().prendreDansLaReserve("Ferraille"));
+    public void jouer(Joueur j) {
+        j.setPointsRails(j.getPointsRails() + 1);
+        if (!Joueur.estEnJeu(j.getCartesEnJeu(), Depotoir.class)) {
+            Carte c = j.getJeu().prendreDansLaReserve("Ferraille");
+            if (c != null) {
+                j.getMain().add(c);
+            }
+        }
     }
 }

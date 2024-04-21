@@ -12,7 +12,7 @@ public class Depot extends Carte {
 
     @Override
     public void jouer(Joueur j) {
-        j.setArgent(j.getArgent() + 1);
+        j.setArgent(j.getArgent() + getValeur());
         List<Carte> cartePioche = j.piocher(2);
         for (Carte c : cartePioche) {
             j.getMain().add(c);

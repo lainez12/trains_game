@@ -8,15 +8,9 @@ public class TGV extends Carte {
     }
 
     @Override
-    public void jouer(Joueur joueur) {
-        super.jouer(joueur);
-        joueur.setArgent(joueur.getArgent() + 1);
-        TrainOmnibus t = new TrainOmnibus();
-        for (int i = 0; i < joueur.getCartesEnJeu().size(); i++) {
-            if (joueur.getCartesEnJeu().get(i).equals(t)){
-                joueur.setArgent(joueur.getArgent() + 1);
-                break;
-            }
-        }
+    public void jouer(Joueur j) {
+        j.setArgent(j.getArgent() + getValeur());
+        if (Joueur.estEnJeu(j.getCartesEnJeu(), TrainOmnibus.class))
+            j.setArgent(j.getArgent() + 1);
     }
 }

@@ -11,26 +11,25 @@ public class TrainPostal extends Carte {
     }
 
     @Override
-    public void jouer(Joueur joueur) {
-        super.jouer(joueur);
-        joueur.setArgent(joueur.getArgent() + 1);
+    public void jouer(Joueur j) {
+        j.setArgent(j.getArgent() + getValeur());
 
         String rep = " ";
         Set<String> choix = new HashSet<>();
-        for (Carte i : joueur.getMain()) {
+        for (Carte i : j.getMain()) {
             choix.add(i.getNom());
         }
 
-        while (rep != "" && !joueur.getMain().isEmpty()) {
-            rep = joueur.choisir("Défausser autant de carte que vous le vouler pour gagner 1 d'argent par carte defausser",choix,null,true);
-            if (rep != ""){
-                Carte temp = joueur.getMain().getCarte(rep);
-                joueur.getMain().retirer(rep);
-                joueur.getDefausse().add(temp);
-                joueur.setArgent(joueur.getArgent() + 1);
-                choix.remove(temp);
+        while (rep != "" && !j.getMain().isEmpty()) {
+            rep = j.choisir(
+                    "Défausser autant de carte que vous le vouler pour gagner 1 d'argent par carte defausser", choix,
+                    null, true);
+            if (rep != "") {
+                j.getDefausse().add(j.getMain().retirer(rep));
+                j.setArgent(j.getArgent() + 1);
+                choix.remove(rep);
             }
-            if (choix.isEmpty()){
+            if (choix.isEmpty()) {
                 break;
             }
         }

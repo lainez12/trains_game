@@ -11,19 +11,19 @@ public class TrainDeMarchandises extends Carte {
     }
 
     @Override
-    public void jouer(Joueur joueur) {
-        super.jouer(joueur);
-        joueur.setArgent(joueur.getArgent() + 1);
+    public void jouer(Joueur j) {
+        j.setArgent(j.getArgent() + getValeur());
 
         String rep = " ";
         Set<String> choix = new HashSet<>();
         choix.add("Ferraille");
 
-        while (rep != "" && joueur.getMain().count("Ferraille") != 0) {
-            rep = joueur.choisir("Voulez vous mettre la feraille de vore main dans la pile feraille",choix,null,true);
-            if (rep != ""){
-                joueur.getJeu().getReserve().get("Ferraille").add(joueur.getMain().retirer("Ferraille"));
-                joueur.setArgent(joueur.getArgent() + 1);
+        while (rep != "" && j.getMain().count("Ferraille") != 0) {
+            rep = j.choisir("Voulez vous mettre la feraille de vore main dans la pile feraille", choix, null,
+                    true);
+            if (rep != "") {
+                j.getJeu().getReserve().get("Ferraille").add(j.getMain().retirer("Ferraille"));
+                j.setArgent(j.getArgent() + 1);
             }
         }
     }

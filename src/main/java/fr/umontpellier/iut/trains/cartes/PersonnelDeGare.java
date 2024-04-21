@@ -11,30 +11,26 @@ public class PersonnelDeGare extends Carte {
     }
 
     @Override
-    public void jouer(Joueur joueur) {
-        super.jouer(joueur);
-
+    public void jouer(Joueur j) {
         Set<String> choix = new HashSet<>();
-        String rep = "";
         choix.add("piocher");
         choix.add("argent");
         choix.add("ferraille");
 
-        rep = joueur.choisir("Choisisser entre piochez une carte, gagner 1 d'argent ou remetre 1 de feraille de votre main sur la pile feraille",choix,null,false);
+        String rep = j.choisir(
+                "Choisisser entre piocher une carte, gagner 1 d'argent ou remettre 1 de feraille de votre main sur la pile ferraille.",
+                choix, null, false);
 
-        if (rep.equals("piocher")){
-            Carte temp = joueur.piocher();
-            if (temp != null){
-                joueur.getMain().add(temp);
+        if (rep.equals("piocher")) {
+            Carte temp = j.piocher();
+            if (temp != null) {
+                j.getMain().add(temp);
             }
-        }
-        else if (rep.equals("argent")){
-            joueur.setArgent(joueur.getArgent() + 1);
-        }
-        else if (rep.equals("ferraille")){
-            if (joueur.getMain().count("Ferraille") != 0){
-                Ferraille f = new Ferraille();
-                joueur.getJeu().getReserve().get("Ferraille").add(joueur.getMain().retirer("Ferraille"));
+        } else if (rep.equals("argent")) {
+            j.setArgent(j.getArgent() + 1);
+        } else if (rep.equals("ferraille")) {
+            if (j.getMain().count("Ferraille") != 0) {
+                j.getJeu().getReserve().get("Ferraille").add(j.getMain().retirer("Ferraille"));
             }
         }
     }

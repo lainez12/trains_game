@@ -10,9 +10,11 @@ public class Cooperation extends Carte {
     @Override
     public void jouer(Joueur j) {
         j.setPointsRails(j.getPointsRails() + 1);
-        Carte c = j.getJeu().prendreDansLaReserve("Feraille");
-        if (c != null) {
-            j.getMain().add(c);
+        if (!Joueur.estEnJeu(j.getCartesEnJeu(), Depotoir.class)) {
+            Carte c = j.getJeu().prendreDansLaReserve("Ferraille");
+            if (c != null) {
+                j.getMain().add(c);
+            }
         }
         j.getCartesEnJeu().add(this);
     }

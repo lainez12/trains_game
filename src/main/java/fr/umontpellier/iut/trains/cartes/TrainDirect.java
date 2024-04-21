@@ -8,8 +8,7 @@ public class TrainDirect extends Carte {
     }
 
     @Override
-    public void jouer(Joueur joueur) {
-        super.jouer(joueur);
-        joueur.setArgent(joueur.getArgent() + 3);
+    public void jouer(Joueur j) {
+        j.setArgent(j.getArgent() + getValeur());
     }
 }

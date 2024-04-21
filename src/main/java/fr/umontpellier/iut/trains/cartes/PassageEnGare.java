@@ -8,12 +8,11 @@ public class PassageEnGare extends Carte {
     }
 
     @Override
-    public void jouer(Joueur joueur) {
-        super.jouer(joueur);
-        Carte temp = joueur.piocher();
-        if (temp != null){
-            joueur.getMain().add(temp);
+    public void jouer(Joueur j) {
+        Carte temp = j.piocher();
+        if (temp != null) {
+            j.getMain().add(temp);
         }
-        joueur.setArgent(joueur.getArgent() + 1);
+        j.setArgent(j.getArgent() + getValeur());
     }
 }
