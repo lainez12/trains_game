@@ -4,4 +4,9 @@ public class Immeuble extends Carte {
     public Immeuble() {
         super("Immeuble", 5, 0, CouleurCarte.JAUNE);
     }
+
+    @Override
+    public int getPoints() {
+        return 2;
+    }
 }
