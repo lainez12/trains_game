@@ -36,12 +36,12 @@ public class GameServer {
         // Noms des joueurs (définit le nombre de joueurs de la partie)
         String[] nomsJoueurs = { "Guybrush", "Largo" };
 
-
         // Liste des cartes à utiliser :
-        String[] nomsCartes = {"Aiguillage", "Passage en gare", "Salle de contrôle"};
+        String[] nomsCartes = { "Aiguillage", "Passage en gare", "Décharge" };
 
         // On peut aussi choisir de tirer aléatoirement 8 cartes préparation
-        // List<String> cartesPreparation = new ArrayList<>(FabriqueListeDeCartes.getNomsCartesPreparation());
+        // List<String> cartesPreparation = new
+        // ArrayList<>(FabriqueListeDeCartes.getNomsCartesPreparation());
         // Collections.shuffle(cartesPreparation);
         // String[] nomsCartes = cartesPreparation.subList(0, 8).toArray(new String[0]);
 

@@ -365,7 +365,7 @@ public class Joueur {
                         }
                         log("Reçoit " + carte); // affichage dans le log
                         if (estEnJeu(cartesEnJeu, TrainMatinal.class)) {
-                            main.add(carte);
+                            passifTrainMatinal(carte);
                         } else {
                             cartesRecues.add(carte);
                         }
@@ -415,7 +415,7 @@ public class Joueur {
             if (!jeu.getTuile(coord).estVide() && surcoutRail(jeu.getTuile(coord))) {
                 Carte c = jeu.prendreDansLaReserve("Ferraille");
                 if (c != null) {
-                    main.add(c);
+                    cartesRecues.add(c);
                 }
             }
             argent -= jeu.getTuile(coord).getSurcout(passifsEnJeu);
@@ -447,6 +447,19 @@ public class Joueur {
         }
         return !estEnJeu(passifsEnJeu, Cooperation.class) && !estEnJeu(passifsEnJeu, Depotoir.class)
                 && !estEnJeu(passifsEnJeu, VoieSouterraine.class);
+    }
+
+    public void passifTrainMatinal(Carte carte) {
+        ArrayList<String> choice = new ArrayList<>();
+        choice.add("oui");
+        choice.add("non");
+        String res = choisir("Voulez vous mettre cette carte sur la pioche ? (oui/non)", choice,
+                null, false);
+        if (res == "oui") {
+            pioche.add(0, carte);
+        } else {
+            cartesRecues.add(carte);
+        }
     }
 
     /**

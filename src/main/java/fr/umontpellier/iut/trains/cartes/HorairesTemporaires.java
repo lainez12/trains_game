@@ -12,6 +12,7 @@ public class HorairesTemporaires extends Carte {
     @Override
     public void jouer(Joueur j) {
         int count = 0;
+        ArrayList<Carte> l = new ArrayList<>();
         Carte c;
         while (count != 2) {
             c = j.piocher();
@@ -20,11 +21,12 @@ public class HorairesTemporaires extends Carte {
                     j.getMain().add(c);
                     count++;
                 } else {
-                    j.getDefausse().add(c);
+                    l.add(c);
                 }
             } else {
                 break;
             }
         }
+        j.getDefausse().addAll(l);
     }
 }

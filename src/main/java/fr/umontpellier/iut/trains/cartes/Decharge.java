@@ -9,8 +9,9 @@ public class Decharge extends Carte {
 
     @Override
     public void jouer(Joueur j) {
-        for (int i = 0; i < j.getMain().count("Ferraille"); i++) {
-            j.getDefausse().add(j.getMain().retirer("Ferraille"));
+        int temp = j.getMain().count("Ferraille");
+        for (int i = 0; i < temp; i++) {
+            j.getJeu().getReserve().get("Ferraille").add(j.getMain().retirer("Ferraille"));
         }
     }
 }

@@ -187,8 +187,6 @@ public class Jeu implements Runnable {
         joueurCourant = joueurs.get(i);
     }
 
-
-
     /**
      * Démarre la partie et exécute les tours des joueurs jusqu'à ce que la partie
      * soit terminée
@@ -205,7 +203,8 @@ public class Jeu implements Runnable {
         }
         for (int i = 0; i < joueurs.size(); i++) {
             log(joueurCourant.getNom() + ": Choisissez votre position de départ");
-            choix = joueurCourant.choisir(String.format("Tour de %s", joueurCourant.getNom()), choixPossibles, null, false);
+            choix = joueurCourant.choisir(String.format("Tour de %s", joueurCourant.getNom()), choixPossibles, null,
+                    false);
             String temp = choix.split(":")[1];
             int coord = Integer.parseInt(temp);
             getTuile(coord).ajouterRail(joueurCourant);
@@ -351,5 +350,17 @@ public class Jeu implements Runnable {
                 Map.entry("tuiles", tuiles.stream().map(Tuile::dataMap).toList()),
                 Map.entry("log", log),
                 Map.entry("reserve", listeReserve));
+    }
+
+    public ListeDeCartes getCartesEcartees() {
+        return cartesEcartees;
+    }
+
+    public int getNbJetonsGare() {
+        return nbJetonsGare;
+    }
+
+    public int setNbJetonsGare(int n) {
+        return n;
     }
 }

@@ -17,8 +17,8 @@ public class HorairesEstivaux extends Carte {
         Set<String> choix = new HashSet<>();
         choix.add("oui");
         choix.add("non");
-        rep = joueur.choisir("Voulez vous ecarter cette carte pour gagner 3 d'argent? oui ou non", choix, null,false);
-        if (rep.equals("oui")){
+        rep = joueur.choisir("Voulez vous ecarter cette carte pour gagner 3 d'argent? oui ou non", choix, null, false);
+        if (rep.equals("oui")) {
             joueur.setArgent(joueur.getArgent() + 3);
             joueur.getJeu().getCartesEcartees().add(joueur.getCartesEnJeu().retirer("Horaires estivaux"));
         }

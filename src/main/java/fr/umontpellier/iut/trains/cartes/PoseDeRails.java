@@ -13,7 +13,7 @@ public class PoseDeRails extends Carte {
         if (!Joueur.estEnJeu(j.getCartesEnJeu(), Depotoir.class)) {
             Carte c = j.getJeu().prendreDansLaReserve("Ferraille");
             if (c != null) {
-                j.getMain().add(c);
+                j.getCartesRecues().add(c);
             }
         }
     }
