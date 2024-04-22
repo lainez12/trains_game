@@ -9,7 +9,7 @@ public class Depotoir extends Carte {
 
     @Override
     public void jouer(Joueur j) {
-        j.setArgent(j.getArgent() + 1);
-        j.getCartesEnJeu().add(this);
+        j.setArgent(j.getArgent() + getValeur());
+        j.getPassifsEnJeu().add(this);
     }
 }

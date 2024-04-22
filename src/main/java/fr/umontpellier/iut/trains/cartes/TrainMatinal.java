@@ -10,6 +10,6 @@ public class TrainMatinal extends Carte {
     @Override
     public void jouer(Joueur j) {
         j.setArgent(j.getArgent() + getValeur());
-        j.getCartesEnJeu().add(this);
+        j.getPassifsEnJeu().add(this);
     }
 }

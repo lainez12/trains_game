@@ -45,4 +45,17 @@ public class TuileVille extends Tuile {
         return 1 + nbGaresPosees + super.getSurcout(l);
     }
 
+    public int getNbGaresMax() {
+        return nbGaresMax;
+    }
+
+    @Override
+    public int getNbGares() {
+        return nbGaresPosees;
+    }
+
+    public void setNbGaresPosees(int nbGaresPosees) {
+        this.nbGaresPosees = nbGaresPosees;
+    }
+
 }

@@ -12,6 +12,7 @@ import fr.umontpellier.iut.trains.cartes.CouleurCarte;
 import fr.umontpellier.iut.trains.cartes.Depotoir;
 import fr.umontpellier.iut.trains.cartes.Cooperation;
 import fr.umontpellier.iut.trains.cartes.FabriqueListeDeCartes;
+import fr.umontpellier.iut.trains.cartes.Ferronnerie;
 import fr.umontpellier.iut.trains.cartes.ListeDeCartes;
 import fr.umontpellier.iut.trains.cartes.PontEnAcier;
 import fr.umontpellier.iut.trains.cartes.TrainMatinal;
@@ -75,6 +76,8 @@ public class Joueur {
 
     private int score;
 
+    private ListeDeCartes passifsEnJeu;
+
     public Joueur(Jeu jeu, String nom, CouleurJoueur couleur) {
         this.jeu = jeu;
         this.nom = nom;
@@ -87,6 +90,7 @@ public class Joueur {
         pioche = new ListeDeCartes();
         cartesEnJeu = new ListeDeCartes();
         cartesRecues = new ListeDeCartes();
+        passifsEnJeu = new ListeDeCartes();
         score = 0;
 
         // créer 7 Train omnibus (non disponibles dans la réserve)
@@ -235,6 +239,10 @@ public class Joueur {
         nbJetonsRails = n;
     }
 
+    public ListeDeCartes getPassifsEnJeu() {
+        return passifsEnJeu;
+    }
+
     /**
      * Retire et renvoie la première carte de la pioche.
      * <p>
@@ -334,6 +342,12 @@ public class Joueur {
                 // ajoute les noms des cartes dans la réserve préfixés de "ACHAT:"
                 choixPossibles.add("ACHAT:" + nomCarte);
             }
+            for (int i = 0; i < jeu.getTuiles().size(); i++) {
+                if (!(jeu.getTuile(i) instanceof TuileMer) && !jeu.getTuile(i).hasRail(this)
+                        && jeu.getTuile(i).estVoisine(this)) {
+                    choixPossibles.add("TUILE:" + i);
+                }
+            }
             // Choix de l'action à réaliser
             String choix = choisir(String.format("Tour de %s", this.nom), choixPossibles, null, true);
 
@@ -385,6 +399,7 @@ public class Joueur {
         defausse.addAll(cartesRecues);
         cartesRecues.clear();
         defausse.addAll(cartesEnJeu);
+        passifsEnJeu.clear();
         cartesEnJeu.clear();
         main.addAll(piocher(5)); // piocher 5 cartes en main
     }
@@ -394,15 +409,7 @@ public class Joueur {
             log("Vous n'avez plus de jeton rail.");
         } else if (pointsRails == 0) {
             log("Vous n'avez plus de point rail.");
-        } else if (coord < 0 || coord > 75) {
-            log("Entier pour coordonnées attendu doit être entre 0 et 75.");
-        } else if (jeu.getTuile(coord) instanceof TuileMer) {
-            log("La rail ne peut être posée dans la mer.");
-        } else if (jeu.getTuile(coord).hasRail(this)) {
-            log("Vous êtes déjà présent sur cette case.");
-        } else if (!jeu.getTuile(coord).estVoisine(this)) {
-            log("Vous ne possédez pas de case voisine.");
-        } else if (jeu.getTuile(coord).getSurcout(cartesEnJeu) > argent) {
+        } else if (jeu.getTuile(coord).getSurcout(passifsEnJeu) > argent) {
             log("Vous n'avez pas assez d'argent.");
         } else {
             if (!jeu.getTuile(coord).estVide() && surcoutRail(jeu.getTuile(coord))) {
@@ -411,7 +418,9 @@ public class Joueur {
                     main.add(c);
                 }
             }
-            argent -= jeu.getTuile(coord).getSurcout(cartesEnJeu);
+            argent -= jeu.getTuile(coord).getSurcout(passifsEnJeu);
+            if (estEnJeu(passifsEnJeu, Ferronnerie.class))
+                argent += 2;
             jeu.getTuile(coord).ajouterRail(this);
             pointsRails--;
             nbJetonsRails--;
@@ -428,16 +437,16 @@ public class Joueur {
     }
 
     private boolean surcoutRail(Tuile t) {
-        if (t instanceof TuileVille && estEnJeu(cartesEnJeu, Viaduc.class))
+        if (t instanceof TuileVille && estEnJeu(passifsEnJeu, Viaduc.class))
             return false;
         if (t instanceof TuileTerrain) {
-            if (((TuileTerrain) t).getType() == TypeTerrain.FLEUVE && estEnJeu(cartesEnJeu, PontEnAcier.class))
+            if (((TuileTerrain) t).getType() == TypeTerrain.FLEUVE && estEnJeu(passifsEnJeu, PontEnAcier.class))
                 return false;
-            if (((TuileTerrain) t).getType() == TypeTerrain.MONTAGNE && estEnJeu(cartesEnJeu, Tunnel.class))
+            if (((TuileTerrain) t).getType() == TypeTerrain.MONTAGNE && estEnJeu(passifsEnJeu, Tunnel.class))
                 return false;
         }
-        return !estEnJeu(cartesEnJeu, Cooperation.class) && !estEnJeu(cartesEnJeu, Depotoir.class)
-                && !estEnJeu(cartesEnJeu, VoieSouterraine.class);
+        return !estEnJeu(passifsEnJeu, Cooperation.class) && !estEnJeu(passifsEnJeu, Depotoir.class)
+                && !estEnJeu(passifsEnJeu, VoieSouterraine.class);
     }
 
     /**

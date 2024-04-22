@@ -15,15 +15,16 @@ public class BureauDuChefDeGare extends Carte {
         Set<String> choix = new HashSet<>();
         String res = "";
         for (Carte i : j.getMain()) {
-            if (i.getCouleur() == CouleurCarte.ROUGE) {
+            if (i.getCouleur() == CouleurCarte.ROUGE && i.getNom() != "Bureau du chef de gare") {
                 choix.add(i.getNom());
             }
         }
         if (choix.isEmpty()) {
-            System.out.println("Vous n'avez pas de carte ACTION en main");
+            j.choisir("Vous n'avez pas de carte ACTION en main", choix, null, true);
         } else {
             res = j.choisir("Choisissez une carte ACTION de votre main à révéler", choix, null, false);
+            j.setArgent(j.getArgent() - j.getMain().getCarte(res).getValeur());
+            j.getMain().getCarte(res).jouer(j);
         }
-        j.getMain().getCarte(res).jouer(j);
     }
 }
