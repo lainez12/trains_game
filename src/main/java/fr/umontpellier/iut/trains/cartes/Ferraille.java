@@ -20,4 +20,5 @@ public class Ferraille extends Carte {
             j.getMain().add(j.getCartesEnJeu().retirer(getNom()));
         }
     }
+
 }
