@@ -12,6 +12,7 @@ import fr.umontpellier.iut.trains.cartes.CouleurCarte;
 import fr.umontpellier.iut.trains.cartes.Depotoir;
 import fr.umontpellier.iut.trains.cartes.Cooperation;
 import fr.umontpellier.iut.trains.cartes.FabriqueListeDeCartes;
+import fr.umontpellier.iut.trains.cartes.Ferraille;
 import fr.umontpellier.iut.trains.cartes.Ferronnerie;
 import fr.umontpellier.iut.trains.cartes.ListeDeCartes;
 import fr.umontpellier.iut.trains.cartes.PontEnAcier;
@@ -336,7 +337,8 @@ public class Joueur {
             List<String> choixPossibles = new ArrayList<>();
             for (Carte c : main) {
                 // ajoute les noms de toutes les cartes en main
-                choixPossibles.add(c.getNom());
+                if (c.getCouleur() != CouleurCarte.JAUNE)
+                    choixPossibles.add(c.getNom());
             }
             for (String nomCarte : jeu.getReserve().keySet()) {
                 // ajoute les noms des cartes dans la réserve préfixés de "ACHAT:"
@@ -390,6 +392,8 @@ public class Joueur {
                 log("Joue " + carte); // affichage dans le log
                 cartesEnJeu.add(carte); // mettre la carte en jeu
                 carte.jouer(this); // exécuter l'action de la carte
+                if (estEnJeu(passifsEnJeu, Ferraille.class))
+                    finTour = true;
             }
         }
         // Finalisation
