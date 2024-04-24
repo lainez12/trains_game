@@ -197,7 +197,7 @@ public class Jeu implements Runnable {
         String choix;
         List<String> choixPossibles = new ArrayList<>();
         for (int i = 0; i < tuiles.size(); i++) {
-            if (!(getTuile(i) instanceof TuileMer && getTuile(i) instanceof TuileEtoile)) {
+            if (!(getTuile(i) instanceof TuileMer || getTuile(i) instanceof TuileEtoile)) {
                 choixPossibles.add("TUILE:" + i);
             }
         }
@@ -232,7 +232,7 @@ public class Jeu implements Runnable {
      */
     public boolean estFini() {
         // À FAIRE: réécrire cette méthode
-        return verifNbJetonsRails() || nbJetonsGare == 0 || verifReservePourFin();
+        return verifNbJetonsRails() || nbJetonsGare <= 0 || verifReservePourFin();
     }
 
     // true si un joueur a nbJetonsRails = 0, false sinon
@@ -249,7 +249,7 @@ public class Jeu implements Runnable {
     private boolean verifReservePourFin() {
         int temp = 0;
         for (Map.Entry<String, ListeDeCartes> l : reserve.entrySet()) {
-            if (l.getValue().isEmpty() && l.getKey() != "Feraille") {
+            if (l.getValue().isEmpty() && l.getKey() != "Ferraille") {
                 temp++;
             }
         }
@@ -361,6 +361,6 @@ public class Jeu implements Runnable {
     }
 
     public int setNbJetonsGare(int n) {
-        return n;
+        return nbJetonsGare = n;
     }
 }

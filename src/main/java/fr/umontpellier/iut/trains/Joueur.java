@@ -27,7 +27,6 @@ import fr.umontpellier.iut.trains.plateau.TuileVille;
 import fr.umontpellier.iut.trains.plateau.TypeTerrain;
 
 public class Joueur {
-    private static final Class<?> Cooperation = null;
     /**
      * Le jeu auquel le joueur est rattaché
      */
@@ -405,6 +404,8 @@ public class Joueur {
         defausse.addAll(cartesEnJeu);
         passifsEnJeu.clear();
         cartesEnJeu.clear();
+        argent = 0;
+        pointsRails = 0;
         main.addAll(piocher(5)); // piocher 5 cartes en main
     }
 
