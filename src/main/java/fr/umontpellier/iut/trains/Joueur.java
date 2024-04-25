@@ -460,7 +460,7 @@ public class Joueur {
         choice.add("non");
         String res = choisir("Voulez vous mettre cette carte sur la pioche ? (oui/non)", choice,
                 null, false);
-        if (res == "oui") {
+        if (res.equals("oui")) {
             pioche.add(0, carte);
         } else {
             cartesRecues.add(carte);
