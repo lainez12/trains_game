@@ -34,7 +34,7 @@ public class UsineDeWagons extends Carte {
             }
             j.getJeu().getCartesEcartees().add(c);
             if (choix2.isEmpty()) {
-                j.choisir("Il n'y a pas de carte train valide dans la réserve, veuillez passer.", choix2, null, true);
+                j.log("Vous n'avez plus de carte train en main.");
             } else {
                 res = j.choisir("Choisissez la carte train que vous souhaitez récupérer.", choix2, null, false);
                 j.getMain().add(j.getJeu().prendreDansLaReserve(res.split(":")[1]));

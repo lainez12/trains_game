@@ -13,6 +13,7 @@ public class CabineDuConducteur extends Carte {
     public void jouer(Joueur j) {
         Carte c;
         ArrayList<String> choix = new ArrayList<>();
+        ArrayList<Carte> res = new ArrayList<>();
         String rep = " ";
         for (Carte i : j.getMain()) {
             choix.add(i.getNom());
@@ -24,9 +25,12 @@ public class CabineDuConducteur extends Carte {
                 j.log("Un/Une " + rep + " a été défaussé(e)");
                 c = j.piocher();
                 if (c != null) {
-                    j.getMain().add(c);
+                    res.add(c);
                 }
             }
+        }
+        for (Carte carte : res) {
+            j.getMain().add(carte);
         }
     }
 }
