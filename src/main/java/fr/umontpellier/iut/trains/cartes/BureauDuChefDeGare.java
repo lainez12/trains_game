@@ -15,7 +15,7 @@ public class BureauDuChefDeGare extends Carte {
         Set<String> choix = new HashSet<>();
         String res = "";
         for (Carte i : j.getMain()) {
-            if (i.getCouleur() == CouleurCarte.ROUGE && i.getNom() != "Bureau du chef de gare") {
+            if (i.getCouleur() == CouleurCarte.ROUGE && !i.getNom().equals("Bureau du chef de gare")) {
                 choix.add(i.getNom());
             }
         }

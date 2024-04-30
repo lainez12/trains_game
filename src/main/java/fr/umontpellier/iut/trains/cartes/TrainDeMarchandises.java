@@ -18,10 +18,10 @@ public class TrainDeMarchandises extends Carte {
         Set<String> choix = new HashSet<>();
         choix.add("Ferraille");
 
-        while (rep != "" && j.getMain().count("Ferraille") != 0) {
+        while (!rep.equals("") && j.getMain().count("Ferraille") != 0) {
             rep = j.choisir("Voulez vous mettre la feraille de vore main dans la pile feraille", choix, null,
                     true);
-            if (rep != "") {
+            if (!rep.equals("")) {
                 j.getJeu().getReserve().get("Ferraille").add(j.getMain().retirer("Ferraille"));
                 j.setArgent(j.getArgent() + 1);
             }

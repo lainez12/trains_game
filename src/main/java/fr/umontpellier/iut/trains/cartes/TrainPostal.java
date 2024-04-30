@@ -20,17 +20,14 @@ public class TrainPostal extends Carte {
             choix.add(i.getNom());
         }
 
-        while (rep != "" && !j.getMain().isEmpty()) {
+        while (!rep.equals("") && !j.getMain().isEmpty()) {
             rep = j.choisir(
-                    "Défausser autant de carte que vous le vouler pour gagner 1 d'argent par carte defausser", choix,
+                    "Défausser autant de carte que vous le voulez pour gagner 1 d'argent par carte defaussée.", choix,
                     null, true);
-            if (rep != "") {
+            if (!rep.equals("")) {
                 j.getDefausse().add(j.getMain().retirer(rep));
                 j.setArgent(j.getArgent() + 1);
                 choix.remove(rep);
-            }
-            if (choix.isEmpty()) {
-                break;
             }
         }
     }

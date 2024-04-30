@@ -18,7 +18,7 @@ public class CabineDuConducteur extends Carte {
         for (Carte i : j.getMain()) {
             choix.add(i.getNom());
         }
-        while (!choix.isEmpty() && rep.equals("")) {
+        while (!choix.isEmpty() && !rep.equals("")) {
             rep = j.choisir("Choisissez une carte à défausser", choix, null, true);
             if (rep != "") {
                 j.getDefausse().add(j.getMain().retirer(rep));

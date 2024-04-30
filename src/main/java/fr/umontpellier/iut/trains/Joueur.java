@@ -378,13 +378,8 @@ public class Joueur {
                 // terminer le tour
                 finTour = true;
             } else if (choix.startsWith("TUILE:")) {
-                String temp = choix.split(":")[1];
-                try {
-                    int coord = Integer.parseInt(temp);
-                    poseRail(coord);
-                } catch (NumberFormatException e) {
-                    log("La chaîne n'est pas un nombre valide.");
-                }
+                int coord = Integer.parseInt(choix.split(":")[1]);
+                poseRail(coord);
             } else {
                 // jouer une carte de la main
                 Carte carte = main.retirer(choix);

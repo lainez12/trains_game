@@ -22,7 +22,7 @@ public class FeuDeSignalisation extends Carte {
                 choix.add("non");
                 String res = j.choisir("Voulez la defausser 'oui' ou la replacer 'non' sur votre deck ?", choix, null,
                         false);
-                if (res == "oui") {
+                if (res.equals("oui")) {
                     j.getDefausse().add(c);
                 } else {
                     j.getPioche().add(0, c);
