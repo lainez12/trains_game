@@ -419,8 +419,6 @@ public class Joueur {
                 }
             }
             argent -= jeu.getTuile(coord).getSurcout(passifsEnJeu);
-            if (estEnJeu(passifsEnJeu, Ferronnerie.class))
-                argent += 2;
             jeu.getTuile(coord).ajouterRail(this);
             pointsRails--;
             nbJetonsRails--;
