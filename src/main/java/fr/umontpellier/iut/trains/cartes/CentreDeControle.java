@@ -1,5 +1,7 @@
 package fr.umontpellier.iut.trains.cartes;
 
+import java.util.ArrayList;
+
 import fr.umontpellier.iut.trains.Joueur;
 
 public class CentreDeControle extends Carte {
@@ -12,9 +14,13 @@ public class CentreDeControle extends Carte {
         Carte c = j.piocher();
         if (c != null) {
             j.getMain().add(c);
-            j.log("Nommez la prochaine carte de votre deck : ");
-            String s = j.getJeu().lireLigne();
-            if (j.getPioche().get(0).getNom() == s) {
+            ArrayList<String> choix = new ArrayList<>();
+            for (String nom : j.getJeu().getReserve().keySet()) {
+                choix.add(nom);
+            }
+            choix.add("Train omnibus");
+            String s = j.choisir("Nommez la prochaine carte de votre deck : ", choix, null, false);
+            if (j.getPioche().get(0).getNom().equals(s)) {
                 j.getMain().add(j.piocher());
             }
         }
