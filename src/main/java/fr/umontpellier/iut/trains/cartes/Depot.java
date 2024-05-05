@@ -17,7 +17,12 @@ public class Depot extends Carte {
         for (Carte c : cartePioche) {
             j.getMain().add(c);
         }
-        for (int i = 0; i < 2; i++) {
+        int temp;
+        if (j.getMain().size() < 2)
+            temp = j.getMain().size();
+        else
+            temp = 2;
+        for (int i = 0; i < temp; i++) {
             List<String> l = new ArrayList<>();
             for (Carte c : j.getMain()) {
                 l.add(c.getNom());

@@ -20,13 +20,14 @@ public class CabineDuConducteur extends Carte {
         }
         while (!choix.isEmpty() && !rep.equals("")) {
             rep = j.choisir("Choisissez une carte à défausser", choix, null, true);
-            if (rep != "") {
+            if (!rep.equals("")) {
                 j.getDefausse().add(j.getMain().retirer(rep));
                 j.log("Un/Une " + rep + " a été défaussé(e)");
                 c = j.piocher();
                 if (c != null) {
                     res.add(c);
                 }
+                choix.remove(rep);
             }
         }
         for (Carte carte : res) {

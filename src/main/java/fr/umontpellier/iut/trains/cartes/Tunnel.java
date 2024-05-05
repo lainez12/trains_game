@@ -10,7 +10,7 @@ public class Tunnel extends Carte {
     @Override
     public void jouer(Joueur j) {
         j.setPointsRails(j.getPointsRails() + 1);
-        if (!Joueur.estEnJeu(j.getCartesEnJeu(), Depotoir.class)) {
+        if (!Joueur.estEnJeu(j.getPassifsEnJeu(), Depotoir.class)) {
             Carte c = j.getJeu().prendreDansLaReserve("Ferraille");
             if (c != null) {
                 j.getCartesRecues().add(c);

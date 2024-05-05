@@ -21,8 +21,11 @@ public class Echangeur extends Carte {
         if (choix.isEmpty()) {
             j.choisir("Vous n'avez pas de carte train en jeu, veuillez passer.", choix, null, true);
         } else {
-            String res = j.choisir("Choisissez une de vos cartes train à mettre sur votre pioche.", choix, null, false);
-            j.getPioche().add(0, j.getCartesEnJeu().remove(choix.indexOf(res)));
+            String res = j.choisir("Choisissez une de vos cartes train à mettre sur votre pioche.(vous pouvez passer)",
+                    choix, null, true);
+            j.getPioche().add(0, j.getCartesEnJeu().retirer(res));
+            if (res.equals("Train matinal"))
+                j.getPassifsEnJeu().retirer(res);
         }
     }
 }

@@ -445,8 +445,7 @@ public class Joueur {
             if (((TuileTerrain) t).getType() == TypeTerrain.MONTAGNE && estEnJeu(passifsEnJeu, Tunnel.class))
                 return false;
         }
-        return !estEnJeu(passifsEnJeu, Cooperation.class) && !estEnJeu(passifsEnJeu, Depotoir.class)
-                && !estEnJeu(passifsEnJeu, VoieSouterraine.class);
+        return !estEnJeu(passifsEnJeu, Cooperation.class) && !estEnJeu(passifsEnJeu, Depotoir.class);
     }
 
     public void passifTrainMatinal(Carte carte) {

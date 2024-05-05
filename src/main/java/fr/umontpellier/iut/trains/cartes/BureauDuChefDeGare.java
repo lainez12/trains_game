@@ -23,7 +23,6 @@ public class BureauDuChefDeGare extends Carte {
             j.choisir("Vous n'avez pas de carte ACTION en main", choix, null, true);
         } else {
             res = j.choisir("Choisissez une carte ACTION de votre main à révéler", choix, null, false);
-            j.setArgent(j.getArgent() - j.getMain().getCarte(res).getValeur());
             j.getMain().getCarte(res).jouer(j);
         }
     }
