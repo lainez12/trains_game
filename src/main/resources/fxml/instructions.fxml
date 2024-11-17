@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
+
+<fx:root alignment="CENTER" prefHeight="80.0" spacing="30.0" type="HBox" xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Text fx:id="nom" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Name">
+         <font>
+            <Font size="24.0" />
+         </font></Text>
+      <TextFlow fx:id="textFlowInstru">
+         <children>
+            <Text fx:id="instructions" strokeType="OUTSIDE" strokeWidth="0.0" text="Intructions" wrappingWidth="213.57666015625">
+               <font>
+                  <Font size="27.0" />
+               </font></Text>
+         </children>
+         <HBox.margin>
+            <Insets top="20.0" />
+         </HBox.margin>
+      </TextFlow>
+   </children>
+</fx:root>

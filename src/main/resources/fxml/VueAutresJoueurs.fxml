@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<fx:root alignment="CENTER" prefHeight="94.0" prefWidth="275.0" type="VBox" xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <Label fx:id="nomJoueur" contentDisplay="CENTER" text="NAME" textAlignment="CENTER" textFill="WHITE">
+            <font>
+                <Font size="19.0" />
+            </font>
+        </Label>
+        <HBox alignment="CENTER" prefHeight="42.0" prefWidth="226.0" spacing="10.0" stylesheets="@/css/style.css">
+            <padding>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+            </padding>
+         <FlowPane prefHeight="0.0" prefWidth="200.0" prefWrapLength="200.0">
+            <children>
+                    <ImageView fitHeight="28.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                            <Image url="@../images/icons/score.png" />
+                        </image>
+                    </ImageView>
+                  <Label fx:id="points" alignment="CENTER" prefHeight="16.0" prefWidth="0.0" text="0" textFill="WHITE" />
+            </children>
+         </FlowPane>
+         <FlowPane columnHalignment="CENTER" prefHeight="0.0" prefWidth="200.0" prefWrapLength="200.0">
+            <children>
+                    <ImageView fitHeight="25.0" fitWidth="19.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                            <Image url="@../images/icons/rail.png" />
+                        </image>
+                    </ImageView>
+                  <Label fx:id="rails" alignment="CENTER" prefHeight="19.0" prefWidth="26.0" text="0" textFill="WHITE" />
+            </children>
+         </FlowPane>
+         <FlowPane prefHeight="50.0" prefWidth="200.0">
+            <children>
+                    <ImageView fitHeight="28.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                            <Image url="@../images/icons/pioche.png" />
+                        </image>
+                    </ImageView>
+                  <Label fx:id="piocher" alignment="CENTER" prefHeight="16.0" prefWidth="19.0" text="0" textFill="WHITE" />
+            </children>
+         </FlowPane>
+         <FlowPane prefHeight="0.0" prefWidth="200.0">
+            <children>
+                    <ImageView fitHeight="23.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                            <Image url="@../images/boutons/defausse.png" />
+                        </image>
+                    </ImageView>
+                  <Label fx:id="defausse" alignment="CENTER" text=" 0" textFill="WHITE" />
+            </children>
+         </FlowPane>
+        </HBox>
+    </children>
+</fx:root>
