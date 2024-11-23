@@ -75,6 +75,12 @@ public class Jeu implements Runnable {
      */
     private List<Bouton> boutons;
 
+    private boolean finis = false;
+
+    public void setFinis(boolean finis) {
+        this.finis = finis;
+    }
+
     /**
      * Constructeur de la classe Jeu
      * 
@@ -214,7 +220,7 @@ public class Jeu implements Runnable {
         }
 
         // tours des joueurs jusqu'à une condition de fin
-        while (!estFini()) {
+        while (!estFini() && !this.finis) {
             joueurCourant.jouerTour();
             passeAuJoueurSuivant();
         }

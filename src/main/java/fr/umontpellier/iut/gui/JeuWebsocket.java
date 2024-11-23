@@ -20,15 +20,12 @@ public class JeuWebsocket extends Jeu {
      * File d'attente des instructions recues par le serveur
      */
     private final BlockingQueue<String> inputQueue;
-    private String[] momJoueurs;
+    private String[] nomJoueurs;
 
     public JeuWebsocket(String[] nomsJoueurs, String[] nomsCartes, Plateau plateau) {
         super(nomsJoueurs, nomsCartes, plateau);
+        this.nomJoueurs = nomsJoueurs;
         inputQueue = new LinkedBlockingQueue<>();
-    }
-
-    public int getNombreJoueurs(){
-        return momJoueurs.length;
     }
 
     @Override
@@ -49,5 +46,17 @@ public class JeuWebsocket extends Jeu {
 
     public void addInput(String input) {
         inputQueue.add(input);
+    }
+
+    public String[] getNomJoueurs() {
+        return nomJoueurs;
+    }
+
+    public void setNomJoueurs(String[] nomJoueurs) {
+        this.nomJoueurs = nomJoueurs;
+    }
+
+    public int getNombreJoueurs() {
+        return nomJoueurs.length;
     }
 }

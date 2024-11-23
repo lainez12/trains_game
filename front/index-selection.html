@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Juego de Trenes</title>
+  <title>Selección de Tipo de Cliente</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <style>
@@ -55,30 +55,20 @@
     .form-container button:hover {
       background-color: #218838;
     }
-    .game-container {
-      margin-top: 20px;
-      width: 100%;
-      height: 100%;
-      display: none;
-    }
   </style>
 </head>
 <body>
-<h1>Bienvenido al Juego</h1>
-<p id="instructions">Seleccione el tipo de cliente que desea ser:</p>
-<div class="button-container" id="initialButtons">
-  <button id="joinAsPlayer">Unirse como Jugador</button>
-  <button id="joinAsSpectator">Unirse como Espectador</button>
+<h1>Bienvenue dans le jeu Trains</h1>
+<p>Sélectionnez le type de client que vous êtes :</p>
+<div class="button-container">
+  <button id="joinAsPlayer">Joueur</button>
+  <button id="joinAsSpectator">Spectateur</button>
 </div>
 
 <div class="form-container" id="playerForm">
-  <input type="text" id="playerName" placeholder="Ingrese su nombre">
-  <input type="number" id="numberOfPlayers" placeholder="Número de jugadores (2-4)" min="2" max="4">
-  <button id="startGame">Iniciar Juego</button>
-</div>
-
-<div class="game-container" id="gameContainer">
-  <app-root></app-root>
+  <input type="text" id="playerName" placeholder="Un nom">
+  <input type="number" id="numberOfPlayers" placeholder="Nombre de joueurs (2-4)" min="2" max="4">
+  <button id="startGame">Aller</button>
 </div>
 
 <script>
@@ -86,21 +76,17 @@
   const joinAsSpectatorButton = document.getElementById('joinAsSpectator');
   const playerForm = document.getElementById('playerForm');
   const startGameButton = document.getElementById('startGame');
-  const gameContainer = document.getElementById('gameContainer');
-  const initialButtons = document.getElementById('initialButtons');
-  const instructions = document.getElementById('instructions');
 
   let socket;
 
   joinAsPlayerButton.addEventListener('click', function() {
     // Mostrar el formulario para que el jugador ingrese su nombre y la cantidad de jugadores
     playerForm.style.display = 'flex';
-    initialButtons.style.display = 'none';
   });
 
   joinAsSpectatorButton.addEventListener('click', function() {
-    // Conectar como espectador
-    connectWebSocket('spectator');
+    // Redirigir a la página principal como espectador
+    window.location.href = 'index.html';
   });
 
   startGameButton.addEventListener('click', function() {
@@ -115,66 +101,25 @@
         cards: ['Aiguillage', 'Passage en gare', 'Décharge']
       };
 
-      // Conectar como jugador y enviar la configuración
-      connectWebSocket('player', configMessage);
-    } else {
-      alert('Por favor, ingrese su nombre y el número de jugadores.');
-    }
-  });
+      // Abrir la conexión WebSocket
+      socket = new WebSocket('ws://localhost:3232');
 
-  function connectWebSocket(role, configMessage = null) {
-    socket = new WebSocket('ws://localhost:3232');
-
-    socket.onopen = function() {
-      console.log("WebSocket conectado");
-      if (role === 'player' && configMessage) {
+      socket.onopen = function() {
         // Enviar la configuración al servidor
         socket.send(JSON.stringify(configMessage));
-      }
-    };
+      };
 
-    socket.onmessage = function(event) {
-      console.log("Mensaje recibido del servidor:", event.data);
-      if (event.data === 'gameConfigured') {
-        // Cambiar a la vista del juego
-        playerForm.style.display = 'none';
-        gameContainer.style.display = 'flex';
-        instructions.textContent = 'Juego en progreso';
+      setTimeout(function() {
+        window.location.href = 'index.html';
+      }, 1000);
 
-        // Cargar los scripts necesarios para el juego
-        loadGameScripts();
-      }
-    };
-
-    socket.onclose = function(event) {
-      console.log("WebSocket cerrado:", event);
-      if (!event.wasClean) {
-        console.error("Conexión cerrada inesperadamente.");
-      }
-    };
-
-    socket.onerror = function(error) {
-      console.error('WebSocket Error:', error);
-    };
-  }
-
-  function loadGameScripts() {
-    // Cargar los estilos y scripts del juego empaquetado
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = 'styles-JCQ3GHWB.css';
-    document.head.appendChild(link);
-
-    const polyfillsScript = document.createElement('script');
-    polyfillsScript.src = 'polyfills-RT5I6R6G.js';
-    polyfillsScript.type = 'module';
-    document.body.appendChild(polyfillsScript);
-
-    const mainScript = document.createElement('script');
-    mainScript.src = 'main-LOBRIF3K.js';
-    mainScript.type = 'module';
-    document.body.appendChild(mainScript);
-  }
+      socket.onerror = function(error) {
+        console.error('WebSocket Error:', error);
+      };
+    } else {
+      alert('Veuillez saisir toutes les données.');
+    }
+  });
 </script>
 </body>
 </html>

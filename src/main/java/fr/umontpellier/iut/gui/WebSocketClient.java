@@ -45,6 +45,10 @@ public class WebSocketClient {
             // Manejo de error, podrías enviar un mensaje de error al cliente
         }
     }
+    /*@OnMessage
+    public void onMessage(String message, Session session) {
+        GameServer.addInput(message);
+    }*/
 
     @OnClose
     public void onClose(Session session) {
