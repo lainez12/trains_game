@@ -20,10 +20,15 @@ public class JeuWebsocket extends Jeu {
      * File d'attente des instructions recues par le serveur
      */
     private final BlockingQueue<String> inputQueue;
+    private String[] momJoueurs;
 
     public JeuWebsocket(String[] nomsJoueurs, String[] nomsCartes, Plateau plateau) {
         super(nomsJoueurs, nomsCartes, plateau);
         inputQueue = new LinkedBlockingQueue<>();
+    }
+
+    public int getNombreJoueurs(){
+        return momJoueurs.length;
     }
 
     @Override

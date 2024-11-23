@@ -1,124 +1,110 @@
 package fr.umontpellier.iut.gui;
 
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
+import com.sun.net.httpserver.HttpServer;
+import fr.umontpellier.iut.gui.JeuWebsocket;
+import fr.umontpellier.iut.trains.plateau.Plateau;
+import org.glassfish.tyrus.server.Server;
 
 import javax.websocket.DeploymentException;
 import javax.websocket.Session;
-
-import org.glassfish.tyrus.server.Server;
-
-import com.sun.net.httpserver.HttpServer;
-
-import fr.umontpellier.iut.trains.cartes.FabriqueListeDeCartes;
-import fr.umontpellier.iut.trains.plateau.Plateau;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.util.ArrayList;
 
 public class GameServer {
-    /**
-     * Liste des clients connectés au serveur
-     */
     private static final ArrayList<Session> clients = new ArrayList<>();
-    /**
-     * Description de l'état du jeu, envoyé aux clients pour la mise à jour de
-     * l'interface graphique
-     */
+    private static final ArrayList<Session> spectators = new ArrayList<>();
     private static String etatJeu = "";
-    /**
-     * Instance de jeu exécutée par le serveur
-     */
     private static JeuWebsocket jeu;
 
+    // Variable para saber si el juego ya está configurado
+    private static boolean isGameConfigured = false;
+
     public static void main(String[] args) throws IOException, DeploymentException {
-        // Noms des joueurs (définit le nombre de joueurs de la partie)
-        String[] nomsJoueurs = { "Guybrush", "Largo" };
-
-        // Liste des cartes à utiliser :
-        String[] nomsCartes = { "Aiguillage", "Passage en gare", "Décharge" };
-
-        // On peut aussi choisir de tirer aléatoirement 8 cartes préparation
-        // List<String> cartesPreparation = new
-        // ArrayList<>(FabriqueListeDeCartes.getNomsCartesPreparation());
-        // Collections.shuffle(cartesPreparation);
-        // String[] nomsCartes = cartesPreparation.subList(0, 8).toArray(new String[0]);
-
-        jeu = new JeuWebsocket(nomsJoueurs, nomsCartes, Plateau.OSAKA);
-
-        // SERVEUR HTTP (pour l'interface graphique)
-        // Crée un contexte pour les requêtes HTTP, attache le handler et démarre le
-        // serveur HTTP
+        // SERVEUR HTTP (para servir el frontend)
         HttpServer httpServer = HttpServer.create(new InetSocketAddress(4242), 0);
         httpServer.createContext("/", new StaticFileHandler("/", "front/", "index.html"));
         httpServer.start();
 
-        // SERVEUR WEBSOCKET (pour communiquer entre l'interface et le jeu)
-        // Prépare le serveur websocket
+        // SERVEUR WEBSOCKET (para comunicar entre el frontend y el backend)
         Server server = new Server("localhost", 3232, "/", WebSocketClient.class);
-        try (Scanner scanner = new Scanner(System.in)) {
-            server.start(); // lance le serveur
-            new Thread(jeu).start(); // démarre le jeu (exécute la méthode Jeu.run() dans un nouveau thread)
-            while (true) {
-                // écoute les entrées au clavier
-                jeu.addInput(scanner.nextLine());
+        server.start();
+
+        System.out.println("Servidor listo. Esperando configuración del juego...");
+    }
+
+    public static void configureGame(String[] joueurs, String[] cartes, Session cliente) {
+        if (!isGameConfigured) {
+            // Configurar los jugadores y las cartas
+            jeu = new JeuWebsocket(joueurs, cartes, Plateau.OSAKA);
+            isGameConfigured = true;
+            System.out.println("Juego configurado exitosamente con los jugadores: " + String.join(", ", joueurs));
+
+            // Enviar notificación de que el juego ha comenzado (opcional)
+            setEtatJeu("El juego ha sido configurado y está listo para comenzar.");
+
+            // Enviar mensaje de confirmación a los clientes conectados
+            clients.add(cliente);
+            try {
+                for (Session session : clients) {
+
+                    session.getBasicRemote().sendText("gameConfigured");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } finally {
-            server.stop();
+            new Thread(() -> {
+                jeu.run();
+            }).start();
         }
     }
 
-    /**
-     * Ajoute une nouvelle instruction à la file d'instructions
-     * (cette méthode est appelée lorsqu'un message est reçue sur la websocket)
-     * 
-     * @param message l'instruction à ajouter
-     */
-    public static void addInput(String message) {
-        jeu.addInput(message);
+    public static void addClient(Session session) {
+        if (isGameConfigured && clients.size() < jeu.getNombreJoueurs()) {
+            clients.add(session);
+            try {
+                session.getBasicRemote().sendText(etatJeu);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            // Los clientes adicionales serán tratados como espectadores
+            spectators.add(session);
+            try {
+                session.getBasicRemote().sendText(etatJeu);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
-    /**
-     * Met à jour l'état de la partie, et envoie le nouvel état à tous les clients
-     * connectés
-     * 
-     * @param etatJeu l'état de la partie
-     */
+    public static void addInput(String message) {
+        if (isGameConfigured) {
+            jeu.addInput(message);
+        } else {
+            System.out.println("El juego aún no está configurado. Esperando configuración...");
+        }
+    }
+
+    public static void removeClient(Session session) {
+        if (clients.remove(session)) {
+            System.out.println("Jugador salio");
+        } else {
+            spectators.remove(session);
+        }
+    }
+
     public static void setEtatJeu(String etatJeu) {
         GameServer.etatJeu = etatJeu;
-        // Envoie l'état de la partie à tous les clients
         try {
             for (Session session : clients) {
+                session.getBasicRemote().sendText(etatJeu);
+            }
+            for (Session session : spectators) {
                 session.getBasicRemote().sendText(etatJeu);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * Ajoute un nouveau client à la liste, et lui transmet l'état actuel de la
-     * partie (cette méthode est appelée lorsqu'une nouvelle connexion est établie)
-     * 
-     * @param session la session du nouveau client
-     */
-    public static void addClient(Session session) {
-        GameServer.clients.add(session);
-        try {
-            session.getBasicRemote().sendText(etatJeu);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Retire un client de la liste
-     * (cette méthode est appelée lorsqu'une connexion est fermée)
-     * 
-     * @param session la session du client à retirer
-     */
-    public static void removeClient(Session session) {
-        GameServer.clients.remove(session);
     }
 }
